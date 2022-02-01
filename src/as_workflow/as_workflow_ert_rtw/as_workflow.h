@@ -9,7 +9,7 @@
 //
 // Model version                  : 1.16
 // Simulink Coder version         : 9.6 (R2021b) 14-May-2021
-// C/C++ source code generated on : Mon Jan 24 17:39:00 2022
+// C/C++ source code generated on : Tue Feb  1 16:42:01 2022
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -44,14 +44,14 @@ class as_workflowModelClass
 
   // External inputs (root inport signals with default storage)
   struct ExtU_as_workflow_T {
-    EBS_STATE EBS_IN;                  // '<Root>/EBS_IN'
-    boolean_T ASMS_IN;                 // '<Root>/ASMS_IN'
-    boolean_T TS_IN;                   // '<Root>/TS_IN'
-    MISSION MISSION_IN;                // '<Root>/MISSION_IN'
-    boolean_T RES_IN;                  // '<Root>/RES_IN'
-    boolean_T MISSION_FINISH_IN;       // '<Root>/MISSION_FINISH_IN'
-    real_T FIRST_BRAKE_IN;             // '<Root>/FIRST_BRAKE_IN'
-    real_T SECOND_BRAKE_IN;            // '<Root>/SECOND_BRAKE_IN'
+    EBS_STATE EBS;                     // '<Root>/EBS'
+    boolean_T IS_ASMS_ON;              // '<Root>/IS_ASMS_ON'
+    boolean_T IS_TS_ON;                // '<Root>/IS_TS_ON'
+    MISSION MISSION_STATUS;            // '<Root>/MISSION_STATUS'
+    boolean_T IS_RES_TRIGGERED;        // '<Root>/IS_RES_TRIGGERED'
+    boolean_T IS_MISSION_FINISHED;     // '<Root>/IS_MISSION_FINISHED'
+    real_T FIRST_BRAKE;                // '<Root>/FIRST_BRAKE'
+    real_T SECOND_BRAKE;               // '<Root>/SECOND_BRAKE'
   };
 
   // External outputs (root outports fed by signals with default storage)
