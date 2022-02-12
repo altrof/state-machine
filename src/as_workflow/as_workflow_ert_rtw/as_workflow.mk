@@ -2,7 +2,7 @@
 ## Makefile generated for component 'as_workflow'. 
 ## 
 ## Makefile     : as_workflow.mk
-## Generated on : Tue Feb 01 16:42:06 2022
+## Generated on : Sat Feb 12 15:36:48 2022
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/as_workflow
 ## Product type : executable
 ## 
@@ -340,7 +340,7 @@ ert_main.o : $(START_DIR)/as_workflow_ert_rtw/ert_main.cpp
 ## DEPENDENCIES
 ###########################################################################
 
-$(ALL_OBJS) : rtw_proj.tmw $(MAKEFILE)
+$(ALL_OBJS) : $(MAKEFILE)
 
 
 ###########################################################################

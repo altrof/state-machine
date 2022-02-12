@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'as_workflow'.
 //
-// Model version                  : 1.16
+// Model version                  : 1.19
 // Simulink Coder version         : 9.6 (R2021b) 14-May-2021
-// C/C++ source code generated on : Tue Feb  1 16:42:01 2022
+// C/C++ source code generated on : Sat Feb 12 15:35:21 2022
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -32,36 +32,57 @@ const uint8_T as_workflow_IN_AS_READY{ 5U };
 
 const uint8_T as_workflow_IN_MANUAL_DRIVING{ 6U };
 
+// System initialize for function-call system: '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+void as_workflowModelClass::IS_BRAKE_PRESSURE_RELEASED_Init(boolean_T
+  *rty_IS_BRAKE_PRESSURE_RELEASED)
+{
+  // SystemInitialize for Merge: '<S7>/Merge'
+  *rty_IS_BRAKE_PRESSURE_RELEASED = false;
+}
+
+// Output and update for function-call system: '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+void as_workflowModelClass::as_w_IS_BRAKE_PRESSURE_RELEASED(real_T
+  rtu_FRONT_BRAKE, real_T rtu_REAR_BRAKE, boolean_T
+  *rty_IS_BRAKE_PRESSURE_RELEASED)
+{
+  // Outputs for IfAction SubSystem: '<S7>/If Action Subsystem1' incorporates:
+  //   ActionPort: '<S9>/Action Port'
+
+  // Outputs for IfAction SubSystem: '<S7>/If Action Subsystem2' incorporates:
+  //   ActionPort: '<S10>/Action Port'
+
+  // Outputs for IfAction SubSystem: '<S7>/If Action Subsystem' incorporates:
+  //   ActionPort: '<S8>/Action Port'
+
+  // If: '<S7>/If' incorporates:
+  //   Inport: '<S10>/In1'
+  //   Inport: '<S8>/In1'
+  //   Inport: '<S9>/In1'
+
+  *rty_IS_BRAKE_PRESSURE_RELEASED = (((rtu_FRONT_BRAKE < 2.0) && (rtu_REAR_BRAKE
+    < 2.0)) || ((rtu_FRONT_BRAKE < 2.0) || (rtu_REAR_BRAKE < 2.0)));
+
+  // End of Outputs for SubSystem: '<S7>/If Action Subsystem'
+  // End of Outputs for SubSystem: '<S7>/If Action Subsystem2'
+  // End of Outputs for SubSystem: '<S7>/If Action Subsystem1'
+}
+
 // Model step function
 void as_workflowModelClass::step()
 {
-  boolean_T rtb_Merge;
-
-  // Outputs for IfAction SubSystem: '<S1>/If Action Subsystem1' incorporates:
-  //   ActionPort: '<S4>/Action Port'
-
-  // Outputs for IfAction SubSystem: '<S1>/If Action Subsystem' incorporates:
-  //   ActionPort: '<S3>/Action Port'
-
-  // If: '<S1>/If' incorporates:
-  //   Inport: '<Root>/FIRST_BRAKE'
-  //   Inport: '<Root>/SECOND_BRAKE'
-  //   Inport: '<S3>/In1'
-  //   Inport: '<S4>/In1'
-
-  rtb_Merge = ((as_workflow_U.FIRST_BRAKE < 2.0) && (as_workflow_U.SECOND_BRAKE <
-    2.0));
-
-  // End of Outputs for SubSystem: '<S1>/If Action Subsystem'
-  // End of Outputs for SubSystem: '<S1>/If Action Subsystem1'
+  boolean_T out;
 
   // Chart: '<Root>/Chart' incorporates:
+  //   If: '<S4>/If'
   //   Inport: '<Root>/EBS'
+  //   Inport: '<Root>/FRONT_BRAKE'
   //   Inport: '<Root>/IS_ASMS_ON'
   //   Inport: '<Root>/IS_MISSION_FINISHED'
+  //   Inport: '<Root>/IS_RES_GO'
   //   Inport: '<Root>/IS_RES_TRIGGERED'
   //   Inport: '<Root>/IS_TS_ON'
   //   Inport: '<Root>/MISSION_STATUS'
+  //   Inport: '<Root>/REAR_BRAKE'
 
   if (as_workflow_DW.temporalCounter_i1 < 63U) {
     as_workflow_DW.temporalCounter_i1 = static_cast<uint8_T>
@@ -94,7 +115,17 @@ void as_workflowModelClass::step()
       break;
 
      case as_workflow_IN_AS_EMERGENCY:
-      if ((!as_workflow_U.IS_ASMS_ON) && rtb_Merge) {
+      if (!as_workflow_U.IS_ASMS_ON) {
+        // Outputs for Function Call SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED' 
+        as_w_IS_BRAKE_PRESSURE_RELEASED(as_workflow_U.FRONT_BRAKE,
+          as_workflow_U.REAR_BRAKE, &out);
+
+        // End of Outputs for SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+      } else {
+        out = false;
+      }
+
+      if (out) {
         as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_OFF;
       } else {
         // Outport: '<Root>/AS_STATUS_OUT'
@@ -108,17 +139,29 @@ void as_workflowModelClass::step()
      case as_workflow_IN_AS_FINISHED:
       if (as_workflow_U.IS_RES_TRIGGERED) {
         as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_EMERGENCY;
-      } else if ((!as_workflow_U.IS_ASMS_ON) && rtb_Merge) {
-        as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_OFF;
       } else {
-        // Outport: '<Root>/AS_STATUS_OUT'
-        as_workflow_Y.AS_STATUS_OUT = AS_STATE_AS_FINISHED;
+        if (!as_workflow_U.IS_ASMS_ON) {
+          // Outputs for Function Call SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED' 
+          as_w_IS_BRAKE_PRESSURE_RELEASED(as_workflow_U.FRONT_BRAKE,
+            as_workflow_U.REAR_BRAKE, &out);
 
-        // Outport: '<Root>/SA_OUT'
-        as_workflow_Y.SA_OUT = SA_STATE_UNAVAILABLE;
+          // End of Outputs for SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+        } else {
+          out = false;
+        }
 
-        // Outport: '<Root>/ASSI_OUT'
-        as_workflow_Y.ASSI_OUT = ASSI_STATE_FINISHED;
+        if (out) {
+          as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_OFF;
+        } else {
+          // Outport: '<Root>/AS_STATUS_OUT'
+          as_workflow_Y.AS_STATUS_OUT = AS_STATE_AS_FINISHED;
+
+          // Outport: '<Root>/SA_OUT'
+          as_workflow_Y.SA_OUT = SA_STATE_UNAVAILABLE;
+
+          // Outport: '<Root>/ASSI_OUT'
+          as_workflow_Y.ASSI_OUT = ASSI_STATE_FINISHED;
+        }
       }
       break;
 
@@ -126,34 +169,60 @@ void as_workflowModelClass::step()
       if ((as_workflow_U.MISSION_STATUS == MISSION_MANUAL) &&
           as_workflow_U.IS_TS_ON && (!as_workflow_U.IS_ASMS_ON)) {
         as_workflow_DW.is_c3_as_workflow = as_workflow_IN_MANUAL_DRIVING;
-      } else if ((as_workflow_U.EBS == EBS_STATE_ARMED) &&
-                 (as_workflow_U.MISSION_STATUS == MISSION_AUTONOMOUS) &&
-                 as_workflow_U.IS_TS_ON && as_workflow_U.IS_ASMS_ON &&
-                 (!rtb_Merge)) {
-        as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_READY;
-        as_workflow_DW.temporalCounter_i1 = 0U;
       } else {
-        // Outport: '<Root>/AS_STATUS_OUT'
-        as_workflow_Y.AS_STATUS_OUT = AS_STATE_AS_OFF;
+        if ((as_workflow_U.EBS == EBS_STATE_ARMED) &&
+            (as_workflow_U.MISSION_STATUS == MISSION_AUTONOMOUS) &&
+            as_workflow_U.IS_TS_ON && as_workflow_U.IS_ASMS_ON) {
+          // Outputs for Function Call SubSystem: '<S1>/IS_BRAKE_PRESSURE_OK'
+          out = ((as_workflow_U.FRONT_BRAKE > 30.0) && (as_workflow_U.REAR_BRAKE
+                  > 30.0));
 
-        // Outport: '<Root>/SA_OUT'
-        as_workflow_Y.SA_OUT = SA_STATE_UNAVAILABLE;
+          // End of Outputs for SubSystem: '<S1>/IS_BRAKE_PRESSURE_OK'
+        } else {
+          out = false;
+        }
 
-        // Outport: '<Root>/SB_OUT'
-        as_workflow_Y.SB_OUT = SB_STATE_UNAVAILABLE;
+        if (out) {
+          as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_READY;
+          as_workflow_DW.temporalCounter_i1 = 0U;
+        } else {
+          // Outport: '<Root>/AS_STATUS_OUT'
+          as_workflow_Y.AS_STATUS_OUT = AS_STATE_AS_OFF;
 
-        // Outport: '<Root>/ASSI_OUT'
-        as_workflow_Y.ASSI_OUT = ASSI_STATE_OFF;
+          // Outport: '<Root>/SA_OUT'
+          as_workflow_Y.SA_OUT = SA_STATE_UNAVAILABLE;
 
-        // Outport: '<Root>/BRAKE_PRESSURE_RELEASED_OUT'
-        as_workflow_Y.BRAKE_PRESSURE_RELEASED_OUT = rtb_Merge;
+          // Outport: '<Root>/SB_OUT'
+          as_workflow_Y.SB_OUT = SB_STATE_UNAVAILABLE;
+
+          // Outport: '<Root>/ASSI_OUT'
+          as_workflow_Y.ASSI_OUT = ASSI_STATE_OFF;
+
+          // Outputs for Function Call SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED' 
+          // Outport: '<Root>/BRAKE_PRESSURE_RELEASED_OUT'
+          as_w_IS_BRAKE_PRESSURE_RELEASED(as_workflow_U.FRONT_BRAKE,
+            as_workflow_U.REAR_BRAKE, &as_workflow_Y.BRAKE_PRESSURE_RELEASED_OUT);
+
+          // End of Outputs for SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+        }
       }
       break;
 
      case as_workflow_IN_AS_READY:
-      if ((!as_workflow_U.IS_ASMS_ON) && rtb_Merge) {
+      if (!as_workflow_U.IS_ASMS_ON) {
+        // Outputs for Function Call SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED' 
+        as_w_IS_BRAKE_PRESSURE_RELEASED(as_workflow_U.FRONT_BRAKE,
+          as_workflow_U.REAR_BRAKE, &out);
+
+        // End of Outputs for SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+      } else {
+        out = false;
+      }
+
+      if (out) {
         as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_OFF;
-      } else if (as_workflow_DW.temporalCounter_i1 >= 50U) {
+      } else if ((as_workflow_DW.temporalCounter_i1 >= 50U) &&
+                 (as_workflow_U.IS_RES_GO != 0.0)) {
         as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_DRIVING;
       } else if (as_workflow_U.EBS == EBS_STATE_ACTIVATED) {
         as_workflow_DW.is_c3_as_workflow = as_workflow_IN_AS_EMERGENCY;
@@ -203,6 +272,15 @@ void as_workflowModelClass::initialize()
 
   // external inputs
   as_workflow_U.MISSION_STATUS = MISSION_MANUAL;
+
+  {
+    boolean_T Merge_k;
+
+    // SystemInitialize for Chart: '<Root>/Chart' incorporates:
+    //   SubSystem: '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+
+    IS_BRAKE_PRESSURE_RELEASED_Init(&Merge_k);
+  }
 }
 
 // Model terminate function

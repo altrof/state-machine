@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'as_workflow'.
 //
-// Model version                  : 1.16
+// Model version                  : 1.19
 // Simulink Coder version         : 9.6 (R2021b) 14-May-2021
-// C/C++ source code generated on : Tue Feb  1 16:42:01 2022
+// C/C++ source code generated on : Sat Feb 12 15:35:21 2022
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -50,8 +50,9 @@ class as_workflowModelClass
     MISSION MISSION_STATUS;            // '<Root>/MISSION_STATUS'
     boolean_T IS_RES_TRIGGERED;        // '<Root>/IS_RES_TRIGGERED'
     boolean_T IS_MISSION_FINISHED;     // '<Root>/IS_MISSION_FINISHED'
-    real_T FIRST_BRAKE;                // '<Root>/FIRST_BRAKE'
-    real_T SECOND_BRAKE;               // '<Root>/SECOND_BRAKE'
+    real_T FRONT_BRAKE;                // '<Root>/FRONT_BRAKE'
+    real_T REAR_BRAKE;                 // '<Root>/REAR_BRAKE'
+    real_T IS_RES_GO;                  // '<Root>/IS_RES_GO'
   };
 
   // External outputs (root outports fed by signals with default storage)
@@ -116,6 +117,12 @@ class as_workflowModelClass
   // Block states
   DW_as_workflow_T as_workflow_DW;
 
+  // private member function(s) for subsystem '<S1>/IS_BRAKE_PRESSURE_RELEASED'
+  static void IS_BRAKE_PRESSURE_RELEASED_Init(boolean_T
+    *rty_IS_BRAKE_PRESSURE_RELEASED);
+  static void as_w_IS_BRAKE_PRESSURE_RELEASED(real_T rtu_FRONT_BRAKE, real_T
+    rtu_REAR_BRAKE, boolean_T *rty_IS_BRAKE_PRESSURE_RELEASED);
+
   // Real-Time Model
   RT_MODEL_as_workflow_T as_workflow_M;
 };
@@ -135,10 +142,16 @@ class as_workflowModelClass
 //  Here is the system hierarchy for this model
 //
 //  '<Root>' : 'as_workflow'
-//  '<S1>'   : 'as_workflow/BrakePressureCheck'
-//  '<S2>'   : 'as_workflow/Chart'
-//  '<S3>'   : 'as_workflow/BrakePressureCheck/If Action Subsystem'
-//  '<S4>'   : 'as_workflow/BrakePressureCheck/If Action Subsystem1'
+//  '<S1>'   : 'as_workflow/Chart'
+//  '<S2>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_OK'
+//  '<S3>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_RELEASED'
+//  '<S4>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_OK/BrakePressureCheck'
+//  '<S5>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_OK/BrakePressureCheck/If Action Subsystem'
+//  '<S6>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_OK/BrakePressureCheck/If Action Subsystem1'
+//  '<S7>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_RELEASED/BrakePressureCheck'
+//  '<S8>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_RELEASED/BrakePressureCheck/If Action Subsystem'
+//  '<S9>'   : 'as_workflow/Chart/IS_BRAKE_PRESSURE_RELEASED/BrakePressureCheck/If Action Subsystem1'
+//  '<S10>'  : 'as_workflow/Chart/IS_BRAKE_PRESSURE_RELEASED/BrakePressureCheck/If Action Subsystem2'
 
 #endif                                 // RTW_HEADER_as_workflow_h_
 
