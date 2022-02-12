@@ -5,7 +5,7 @@
 #include "main.h"
 
 void Main::publishSystemState() {
-    dv_main::sendCan outMsg; //
+    dv_main::sendCan outMsg;
 
     outMsg.message_name = "DV_SystemStatus";
 

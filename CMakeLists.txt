@@ -208,3 +208,4 @@ add_executable(state-machine src/main.cpp src/main.h src/as_workflow/as_workflow
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
