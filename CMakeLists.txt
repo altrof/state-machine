@@ -9,6 +9,7 @@ project(state_machine)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
         roscpp
+        dv_main
         )
 
 ## System dependencies are found with CMake's conventions
@@ -133,8 +134,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/state_machine_node.cpp)
-add_executable(publisher src/publisher.cpp)
-add_executable(subscriber src/subscriber.cpp src/as_workflow/as_workflow_ert_rtw/as_workflow.cpp)
+add_executable(state-machine src/main.cpp src/main.h src/as_workflow/as_workflow_ert_rtw/as_workflow.cpp src/as_workflow/as_workflow_ert_rtw/as_workflow.h)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,10 +150,7 @@ add_executable(subscriber src/subscriber.cpp src/as_workflow/as_workflow_ert_rtw
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
- target_link_libraries(publisher
-   ${catkin_LIBRARIES}
- )
- target_link_libraries(subscriber
+ target_link_libraries(state-machine
    ${catkin_LIBRARIES}
  )
 
